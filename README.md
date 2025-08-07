@@ -29,7 +29,7 @@ If you're hosting the app locally, we also recommend using a tunneling service l
 Start an [ngrok](https://ngrok.com) tunnel for port `3000`:
 
 ```bash
-ngrok http 3000
+ngrok http 8765
 ```
 Ngrok will give you a unique URL, like `abc123.ngrok.io`. Copy the URL without http:// or https://. You'll need this URL in the next step.
 
