@@ -16,20 +16,31 @@ const app = express();
 ExpressWs(app);
 
 const PORT = process.env.PORT || 8765;
-
 app.post('/incoming', (req, res) => {
   try {
     const response = new VoiceResponse();
     const connect = response.connect();
-   connect.stream({ url: `wss://${process.env.SERVER}/connection`, track: 'both_tracks' });
 
-  
+    // inbound audio from caller → your websocket
+    connect.stream({
+      url: `wss://${process.env.SERVER}/connection`,
+      track: 'inbound_track',
+    });
+
+    // outbound audio from your websocket → caller
+    connect.stream({
+      url: `wss://${process.env.SERVER}/connection`,
+      track: 'outbound_track',
+    });
+
     res.type('text/xml');
     res.end(response.toString());
   } catch (err) {
-    console.log(err);
+    console.error(err);
+    res.status(500).send('Error generating TwiML');
   }
 });
+
 
 app.ws('/connection', (ws) => {
   try {
