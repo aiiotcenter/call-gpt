@@ -70,7 +70,7 @@ app.ws('/connection', (ws) => {
         // Set RECORDING_ENABLED='true' in .env to record calls
         recordingService(ttsService, callSid).then(() => {
           console.log(`Twilio -> Starting Media Stream for ${streamSid}`.underline.red);
-          ttsService.generate({partialResponseIndex: null, partialResponse: 'hello! • Welcome to near east university the Faculty of Artificial Intelligence help desk. • How can I assist you today?'}, 0);
+          ttsService.generate({partialResponseIndex: null, partialResponse: 'hello! Welcome to near east university the Faculty of Artificial Intelligence help desk. How can I assist you today?'}, 0);
         });
       } else if (msg.event === 'media') {
         transcriptionService.send(msg.media.payload);
@@ -105,7 +105,12 @@ app.ws('/connection', (ws) => {
     
     gptService.on('gptreply', async (gptReply, icount) => {
       console.log(`Interaction ${icount}: GPT -> TTS: ${gptReply.partialResponse}`.green );
-      ttsService.generate(gptReply, icount);
+      // Remove '•' before sending to TTS
+      const cleanReply = {
+        ...gptReply,
+        partialResponse: gptReply.partialResponse.replace(/•/g, '').trim()
+      };
+      ttsService.generate(cleanReply, icount);
     });
   
     ttsService.on('speech', (responseIndex, audio, label, icount) => {
