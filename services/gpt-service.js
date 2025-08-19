@@ -30,9 +30,12 @@ Your role is to act like a professional help desk agent.
   },
   { 
     role: 'assistant', 
-    content: `Hello! Welcome to the Faculty of Artificial Intelligence help desk. How can I assist you today?` 
+    content: `Hello! • Welcome to the Faculty of Artificial Intelligence help desk. • How can I assist you today?` 
   },
 ];
+
+this.partialResponseIndex = 0;
+
   }
 
   // Add the callSid to the chat context in case
