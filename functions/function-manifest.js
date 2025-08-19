@@ -3,101 +3,124 @@ const tools = [
   {
     type: 'function',
     function: {
-      name: 'checkInventory',
-      say: 'Let me check our inventory right now.',
-      description: 'Check the inventory of airpods, airpods pro or airpods max.',
+      name: 'checkCourseInfo',
+      say: 'Let me check the course information for you.',
+      description: 'Retrieve details about a specific course (title, language, teacher, etc.).',
       parameters: {
         type: 'object',
         properties: {
-          model: {
+          courseCode: {
             type: 'string',
-            'enum': ['airpods', 'airpods pro', 'airpods max'],
-            description: 'The model of airpods, either the airpods, airpods pro or airpods max',
+            description: 'The course code (e.g., AI101, ML202).',
           },
         },
-        required: ['model'],
+        required: ['courseCode'],
       },
       returns: {
         type: 'object',
         properties: {
-          stock: {
-            type: 'integer',
-            description: 'An integer containing how many of the model are in currently in stock.'
-          }
-        }
-      }
+          title: { type: 'string', description: 'Course title' },
+          language: { type: 'string', description: 'Language of instruction' },
+          teacher: { type: 'string', description: 'Instructor name' },
+          credits: { type: 'integer', description: 'Number of credits' },
+        },
+      },
     },
   },
   {
     type: 'function',
     function: {
-      name: 'checkPrice',
-      say: 'Let me check the price, one moment.',
-      description: 'Check the price of given model of airpods, airpods pro or airpods max.',
+      name: 'checkSchedule',
+      say: 'Let me check the schedule for you.',
+      description: 'Retrieve the schedule for a given course or semester.',
       parameters: {
         type: 'object',
         properties: {
-          model: {
+          courseCode: {
             type: 'string',
-            'enum': ['airpods', 'airpods pro', 'airpods max'],
-            description: 'The model of airpods, either the airpods, airpods pro or airpods max',
+            description: 'Optional: course code to check schedule for.',
+          },
+          semester: {
+            type: 'string',
+            description: 'Optional: semester (e.g., Fall 2025, Spring 2026).',
           },
         },
-        required: ['model'],
       },
       returns: {
         type: 'object',
         properties: {
-          price: {
-            type: 'integer',
-            description: 'the price of the model'
-          }
-        }
-      }
+          schedule: {
+            type: 'array',
+            description: 'List of class sessions',
+            items: {
+              type: 'object',
+              properties: {
+                day: { type: 'string', description: 'Day of the week' },
+                time: { type: 'string', description: 'Class time' },
+                room: { type: 'string', description: 'Room or lab location' },
+              },
+            },
+          },
+        },
+      },
     },
   },
   {
     type: 'function',
     function: {
-      name: 'placeOrder',
-      say: 'All right, I\'m just going to ring that up in our system.',
-      description: 'Places an order for a set of airpods.',
+      name: 'checkFacultyInfo',
+      say: 'Let me get the faculty information for you.',
+      description: 'Retrieve details about faculty or staff members.',
       parameters: {
         type: 'object',
         properties: {
-          model: {
+          name: {
             type: 'string',
-            'enum': ['airpods', 'airpods pro'],
-            description: 'The model of airpods, either the regular or pro',
-          },
-          quantity: {
-            type: 'integer',
-            description: 'The number of airpods they want to order',
+            description: 'Name of the faculty or staff member.',
           },
         },
-        required: ['type', 'quantity'],
+        required: ['name'],
       },
       returns: {
         type: 'object',
         properties: {
-          price: {
-            type: 'integer',
-            description: 'The total price of the order including tax'
-          },
-          orderNumber: {
-            type: 'integer',
-            description: 'The order number associated with the order.'
-          }
-        }
-      }
+          title: { type: 'string', description: 'Academic title or position' },
+          office: { type: 'string', description: 'Office location' },
+          email: { type: 'string', description: 'Email address' },
+          phone: { type: 'string', description: 'Contact number' },
+        },
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'reportIssue',
+      say: 'I will log this issue for our support team.',
+      description: 'Log a technical or administrative issue reported by the student.',
+      parameters: {
+        type: 'object',
+        properties: {
+          userId: { type: 'string', description: 'Student or staff ID' },
+          issue: { type: 'string', description: 'Description of the issue' },
+        },
+        required: ['userId', 'issue'],
+      },
+      returns: {
+        type: 'object',
+        properties: {
+          ticketId: { type: 'string', description: 'Support ticket number' },
+          status: { type: 'string', description: 'Status of the issue report' },
+        },
+      },
     },
   },
   {
     type: 'function',
     function: {
       name: 'transferCall',
-      say: 'One moment while I transfer your call.',
-      description: 'Transfers the customer to a live agent in case they request help from a real person.',
+      say: 'One moment while I transfer your call to a faculty administrator.',
+      description: 'Transfers the caller to a live faculty help desk agent.',
       parameters: {
         type: 'object',
         properties: {
@@ -113,10 +136,10 @@ const tools = [
         properties: {
           status: {
             type: 'string',
-            description: 'Whether or not the customer call was successfully transfered'
+            description: 'Whether or not the call was successfully transferred.',
           },
-        }
-      }
+        },
+      },
     },
   },
 ];
