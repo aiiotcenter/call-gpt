@@ -134,12 +134,20 @@ this.partialResponseIndex = 0;
         // We use partialResponse to provide a chunk for TTS
         partialResponse += content;
         // Emit last partial response and add complete response to userContext
-        if (content.trim().slice(-1) === '•' || finishReason === 'stop') {
+        if (content.trim().slice(-1) === '•') {
           const gptReply = { 
             partialResponseIndex: this.partialResponseIndex,
             partialResponse
           };
-
+          this.emit('gptreply', gptReply, interactionCount);
+          this.partialResponseIndex++;
+          partialResponse = '';
+        } else if (finishReason === 'stop' && partialResponse.trim() !== '') {
+          // Always emit the last chunk if not empty
+          const gptReply = { 
+            partialResponseIndex: this.partialResponseIndex,
+            partialResponse
+          };
           this.emit('gptreply', gptReply, interactionCount);
           this.partialResponseIndex++;
           partialResponse = '';
