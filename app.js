@@ -105,7 +105,12 @@ app.ws('/connection', (ws) => {
     
     gptService.on('gptreply', async (gptReply, icount) => {
       console.log(`Interaction ${icount}: GPT -> TTS: ${gptReply.partialResponse}`.green );
-      ttsService.generate(gptReply, icount);
+      // Remove '•' before sending to TTS
+      const cleanReply = {
+        ...gptReply,
+        partialResponse: gptReply.partialResponse.replace(/•/g, '').trim()
+      };
+      ttsService.generate(cleanReply, icount);
     });
   
     ttsService.on('speech', (responseIndex, audio, label, icount) => {
