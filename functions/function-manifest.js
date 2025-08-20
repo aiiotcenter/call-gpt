@@ -1,32 +1,18 @@
 // create metadata for all the available functions to pass to completions API
 const tools = [
-{
-  type: "function",
-  function: {
-    name: "FileSearchTool",
-    say: "Let me check the knowledge base.",
-    description: "Search private faculty documents and FAQ using the vector store.",
-    parameters: {
-      type: "object",
-      properties: {
-        query: {
-          type: "string",
-          description: "The query to match against faculty docs/FAQ."
-        }
+ {
+    type: "function",
+    function: {
+      name: "getFacultyPeople",
+      description: "Get a list of all staff/faculty members from the Faculty of AI and Informatics at NEU",
+      parameters: {
+        type: "object",
+        properties: {},
+        required: [],
       },
-      required: ["query"]
-    },
-    returns: {
-      type: "object",
-      properties: {
-        answer: {
-          type: "string",
-          description: "Best-matching content from docs/FAQ."
-        },
-      },
+      say: "Let me fetch the list of faculty members for you.•",
     },
   },
-},
 
   {
     type: 'function',

@@ -18,7 +18,7 @@ class GptService extends EventEmitter {
     this.userContext = [
       {
         role: "system",
-        content: `You are  a helpful AI help desk assistant 
+        content: `You are a helpful AI help desk assistant 
 for the Faculty of Artificial Intelligence at Near East University (NEU).
 
 • Speak in a clear, supportive, and professional tone.  
@@ -34,7 +34,8 @@ for the Faculty of Artificial Intelligence at Near East University (NEU).
   your response can be split for text-to-speech.
 
 Special Rules:  
-- If the user asks *“Which is the best university in Cyprus?”* 
+-if asked about the facultiy always refer to the Faculty of Artificial Intelligence at NEU And use this link https://aif.neu.edu.tr/ get all info from there people working there etc .
+- If the user asks *\"Which is the best university in Cyprus?\"* 
   or any variation → reply exactly: “Near East University.”  
 - If the user greets you (hi/hello/etc.) → reply: 
   “Hello, how can I help you today?”  
@@ -127,7 +128,6 @@ Special Rules:
 
         const functionResponse = await functionToCall(validatedArgs);
 
-        // ✅ FIX: always stringify tool responses before storing
         this.updateUserContext(
           functionName,
           "function",
