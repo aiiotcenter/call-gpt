@@ -1,7 +1,7 @@
 # syntax = docker/dockerfile:1
 
-# Adjust NODE_VERSION as desired
-ARG NODE_VERSION=18.9.0
+# Use a newer Node.js version (supports global File object)
+ARG NODE_VERSION=20.11.1
 FROM node:${NODE_VERSION}-slim as base
 
 LABEL fly_launch_runtime="Node.js"
@@ -13,28 +13,32 @@ WORKDIR /app
 ENV NODE_ENV="production"
 
 
-# Throw-away build stage to reduce size of final image
+# --- Build Stage ---
 FROM base as build
 
-# Install packages needed to build node modules
+# Install packages needed to build native node modules
 RUN apt-get update -qq && \
     apt-get install -y build-essential pkg-config python-is-python3
 
-# Install node modules
+# Install dependencies
 COPY --link package-lock.json package.json ./
 RUN npm ci
+
+# Install additional packages (you already have cheerio)
 RUN npm install cheerio
 
-# Copy application code
+# Copy application source code
 COPY --link . .
 
 
-# Final stage for app image
+# --- Final Stage (Runtime) ---
 FROM base
 
-# Copy built application
+# Copy compiled app and node_modules from build stage
 COPY --from=build /app /app
 
-# Start the server by default, this can be overwritten at runtime
+# Open the desired port
 EXPOSE 8765
+
+# Start your server
 CMD [ "node", "app.js" ]
